@@ -34,7 +34,7 @@ export default function Home() {
         </div>
 
       {/* Tags container */}
-  <div className="absolute bottom-12 left-0 w-full overflow-hidden">
+  <div className="absolute bottom-8 left-0 w-full overflow-hidden">
     <div className="flex animate-scroll gap-6 w-max">
     {[...Array(2)].flatMap(() => [
       // Primary Skills - highlighted / main focus
