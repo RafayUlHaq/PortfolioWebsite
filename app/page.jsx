@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { motion } from "framer-motion"
 
 const skills = [
@@ -42,15 +43,18 @@ function SkillIcon({ type }) {
 
 export default function Home() {
   return (
-    <section
-      className="relative min-h-screen overflow-hidden flex items-center px-6 md:px-20 lg:px-40"
-      style={{
-        backgroundImage: "linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.25)), url('/images/RAFAY-WEBSITE-02.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
-    >
+    <section className="relative min-h-screen overflow-hidden flex items-center px-6 md:px-20 lg:px-40">
+      {/* Background Image - Next.js optimized */}
+      <Image
+        src="/images/RAFAY-WEBSITE-02.png"
+        alt="Background"
+        fill
+        priority
+        quality={85}
+        className="object-cover object-center -z-10"
+      />
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-black/25 -z-10" />
       {/* Hero Content */}
       <div className="relative z-10 flex-1 w-full flex flex-col justify-center max-w-3xl pt-24 sm:pt-32 md:pt-88">
         {/* Name and Title */}
@@ -111,7 +115,7 @@ export default function Home() {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.8, duration: 0.6 }}
-        className="hidden md:block absolute right-6 md:right-40 top-[65%] -translate-y-1/2 z-20"
+        className="hidden md:block absolute right-6 md:right-40 top-[70%] -translate-y-1/2 z-20"
       >
         <Link
           href="/contact"
