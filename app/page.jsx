@@ -42,19 +42,19 @@ function SkillIcon({ type }) {
 
 export default function Home() {
   return (
-    <section 
+    <section
       className="relative min-h-screen overflow-hidden flex items-center px-6 md:px-20 lg:px-40"
       style={{
-        backgroundImage: "linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.25)), url('/images/RAFAY-WEBSITE-02 .jpg')",
+        backgroundImage: "linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.25)), url('/images/RAFAY-WEBSITE-02.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
       }}
     >
       {/* Hero Content */}
-      <div className="relative z-10 flex-1 w-full flex flex-col justify-center max-w-3xl pt-24 sm:pt-32 md:pt-72">
+      <div className="relative z-10 flex-1 w-full flex flex-col justify-center max-w-3xl pt-24 sm:pt-32 md:pt-88">
         {/* Name and Title */}
-        <motion.h1 
+        <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
@@ -62,7 +62,7 @@ export default function Home() {
         >
           <span className="text-gradient">Rafay Ul Haq</span>
           <br />
-          <motion.span 
+          <motion.span
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.8 }}
@@ -73,7 +73,7 @@ export default function Home() {
         </motion.h1>
 
         {/* Tagline */}
-        <motion.p 
+        <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.6 }}
@@ -83,7 +83,7 @@ export default function Home() {
         </motion.p>
 
         {/* Mobile CTA Buttons */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7, duration: 0.6 }}
@@ -107,7 +107,7 @@ export default function Home() {
       </div>
 
       {/* CTA Button - Desktop */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.8, duration: 0.6 }}
