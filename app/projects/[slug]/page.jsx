@@ -123,9 +123,8 @@ export default function ProjectPage({ params }) {
               </a>
             )}
 
-            {project.github && project.live && (
-              <>
-                <a
+            {project.github && (
+              <a
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -138,6 +137,10 @@ export default function ProjectPage({ params }) {
                   </svg>
                   View Code
                 </a>
+            )}
+
+            {project.live && (
+              <>
                 <a
                   href={project.live}
                   target="_blank"
@@ -153,6 +156,7 @@ export default function ProjectPage({ params }) {
                 </a>
               </>
             )}
+            
           </div>
         </motion.div>
       </div>

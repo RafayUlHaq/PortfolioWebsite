@@ -7,15 +7,15 @@ import Link from "next/link"
 const projects = [
   {
     id: 1,
-    slug: "portfolio-website",
-    title: "Portfolio Website",
-    description: "Personal portfolio built with Next.js and Tailwind CSS featuring smooth animations and responsive design.",
-    tags: ["Next.js", "Tailwind CSS", "Framer Motion"],
-    image: "/images/portfolio.png",
+    slug: "clients-portfolio-website",
+    title: "Client's Webfolio",
+    description: "Built a conversion-focused webfolio using React, Node.js, and component-driven design to showcase the client’s skills and projects.",
+    tags: ["React19", "Tailwind CSS", "Framer Motion", "Next.js 16"],
+    image: "/images/SalaarsWebfolio.jpg",
     type: "image",
-    github: "https://github.com/RafayUlHaq/PortfolioWebsite",
-    live: "https://webfolio-rafayulhaq.vercel.app/",
     showLinks: true,
+    live: "https://webfolio-salaarahmad.vercel.app/",
+    github: "https://github.com/salaar-ahmad/Salaar-s-Webfolio", 
   },
   {
     id: 2,
