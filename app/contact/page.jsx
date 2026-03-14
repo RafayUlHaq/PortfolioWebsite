@@ -1,6 +1,8 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { useState } from "react"
+import EmailModal from "@/components/EmailModal"
 
 function EmailIcon() {
   return (
@@ -44,6 +46,8 @@ function LinkedInIcon() {
 }
 
 export default function Contact() {
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false)
+
   return (
     <section className="min-h-screen px-6 md:px-20 lg:px-40 py-20 bg-[#0a0a0a] flex items-center">
       <div className="max-w-6xl mx-auto w-full">
@@ -151,8 +155,8 @@ export default function Contact() {
 
             {/* CTA Button */}
             <div className="pt-4">
-              <a
-                href="mailto:r.haq026@gmail.com"
+              <button
+                onClick={() => setIsEmailModalOpen(true)}
                 className="inline-flex items-center gap-2 rounded-full bg-[#EA9666] px-8 py-4 
                          text-white font-medium hover:bg-[#D8A37F] 
                          hover:shadow-lg hover:shadow-[#EA9666]/30 transition-all"
@@ -161,11 +165,17 @@ export default function Contact() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
                 Send an Email
-              </a>
+              </button>
             </div>
           </motion.div>
         </div>
       </div>
+
+      {/* Email Modal */}
+      <EmailModal 
+        isOpen={isEmailModalOpen} 
+        onClose={() => setIsEmailModalOpen(false)} 
+      />
     </section>
   )
 }

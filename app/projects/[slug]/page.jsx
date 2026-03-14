@@ -4,14 +4,27 @@ import { projects } from "@/data/projects"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { use } from "react"
+import { use, useState } from "react"
 
 export default function ProjectPage({ params }) {
   const resolvedParams = use(params)
   const project = projects.find(p => p.slug === resolvedParams.slug)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
   if (!project) {
     notFound()
+  }
+
+  const nextImage = () => {
+    if (project.images) {
+      setCurrentImageIndex((prev) => (prev + 1) % project.images.length)
+    }
+  }
+
+  const prevImage = () => {
+    if (project.images) {
+      setCurrentImageIndex((prev) => (prev - 1 + project.images.length) % project.images.length)
+    }
   }
 
   return (
@@ -59,7 +72,7 @@ export default function ProjectPage({ params }) {
           </div>
 
           {/* Media */}
-          <div className="rounded-2xl overflow-hidden bg-black/20 border border-white/10">
+          <div className="rounded-2xl overflow-hidden bg-black/20 border border-white/10 relative">
             {project.type === "video" ? (
               <video
                 src={project.video}
@@ -70,6 +83,51 @@ export default function ProjectPage({ params }) {
                 loop
                 playsInline
               />
+            ) : project.type === "slideshow" ? (
+              <>
+                <img
+                  src={project.images[currentImageIndex]}
+                  alt={`${project.title} - Image ${currentImageIndex + 1}`}
+                  className="w-full aspect-video object-cover"
+                />
+                {/* Navigation Arrows */}
+                {project.images.length > 1 && (
+                  <>
+                    <button
+                      onClick={prevImage}
+                      className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-[#EA9666] transition-all z-10"
+                    >
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={nextImage}
+                      className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-[#EA9666] transition-all z-10"
+                    >
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                    {/* Image Counter */}
+                    <div className="absolute bottom-4 right-4 bg-black/50 backdrop-blur-sm rounded-full px-4 py-2 text-white text-sm z-10">
+                      {currentImageIndex + 1} / {project.images.length}
+                    </div>
+                    {/* Image Dots */}
+                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+                      {project.images.map((_, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setCurrentImageIndex(idx)}
+                          className={`w-3 h-3 rounded-full transition-all ${
+                            idx === currentImageIndex ? 'bg-[#EA9666]' : 'bg-white/30 hover:bg-white/50'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </>
+                )}
+              </>
             ) : (
               <img
                 src={project.image}

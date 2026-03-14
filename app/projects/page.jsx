@@ -3,56 +3,42 @@
 import { motion, AnimatePresence } from "framer-motion"
 import { useState } from "react"
 import Link from "next/link"
+import { projects } from "@/data/projects"
 
-const projects = [
-  {
-    id: 1,
-    slug: "clients-portfolio-website",
-    title: "Client's Webfolio",
-    description: "Built a conversion-focused webfolio using React, Node.js, and component-driven design to showcase the client’s skills and projects.",
-    tags: ["React19", "Tailwind CSS", "Framer Motion", "Next.js 16"],
-    image: "/images/SalaarsWebfolio.jpg",
-    type: "image",
-    showLinks: true,
-    live: "https://webfolio-salaarahmad.vercel.app/",
-    github: "https://github.com/salaar-ahmad/Salaar-s-Webfolio", 
-  },
-  {
-    id: 2,
-    slug: "web-app-design",
-    title: "Web App Design",
-    description: "Designed an AI assistant to adjust writing tone, built with components and light/dark modes.",
-    tags: ["Figma", "UI/UX", "Web App"],
-    video: "/Videos/AI-Assistant-Web-Portfolio.mp4",
-    type: "video",
-    showLinks: true,
-    figmaFile: "https://www.figma.com/design/dXfrP0Ape82pHoEqFD2XkT/AI-Assistant?node-id=0-1&t=63As1tH1pokkRXpT-1",
-  },
-  {
-    id: 3,
-    slug: "mobile-app-design",
-    title: "Mobile App Design",
-    description: "Designed an AI contract generation mobile app to ease contract generation and sharing.",
-    tags: ["Figma", "UI/UX", "Mobile App"],
-    video: "/Videos/ContractAI-Mobile-App.mp4",
-    type: "video",
-    showLinks: true,
-    figmaFile: "https://www.figma.com/design/bipjcAgPbL8DrxWh1yl6Tu/Contrify---App?node-id=0-1&t=0tp97NmSc8KdnGxB-1",
-  },
-  {
-    id: 4,
-    slug: "marketing-campaign",
-    title: "Marketing Campaign",
-    description: "Marketing campaign for a sponsor of FMC to increase their reach.",
-    tags: ["Marketing", "Social Media", "Brand Awareness"],
-    video: "/Videos/marketing-campaign.mp4",
-    type: "video",
-    showLinks: true,
-    linkedinPost: "https://www.linkedin.com/posts/rafayulhaq_fast-music-club-on-instagram-introducing-activity-7261391060919062528-2Rg6?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEVN4ScBCZZCKiwTolS_EtlDTQCrSfXHlec",
-  },
-]
+function ProjectCard({ project, index, onVideoHover, onSlideshowHover }) {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
-function ProjectCard({ project, index, onVideoHover }) {
+  const handleMouseEnter = () => {
+    if (project.type === "video") {
+      onVideoHover(project)
+    } else if (project.type === "slideshow") {
+      onSlideshowHover(project)
+      // Start slideshow if multiple images
+      if (project.images && project.images.length > 1) {
+        const interval = setInterval(() => {
+          setCurrentImageIndex((prev) => (prev + 1) % project.images.length)
+        }, 1000) // Change image every 1 second
+        
+        // Store interval to clear it later
+        project._slideshowInterval = interval
+      }
+    }
+  }
+
+  const handleMouseLeave = () => {
+    if (project.type === "video") {
+      onVideoHover(null)
+    } else if (project.type === "slideshow") {
+      onSlideshowHover(null)
+      // Clear slideshow interval
+      if (project._slideshowInterval) {
+        clearInterval(project._slideshowInterval)
+        project._slideshowInterval = null
+      }
+      setCurrentImageIndex(0) // Reset to first image
+    }
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -70,8 +56,8 @@ function ProjectCard({ project, index, onVideoHover }) {
       <motion.div
         className="relative h-48 overflow-hidden bg-black/20 media-hover"
         whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
-        onMouseEnter={() => project.type === "video" && onVideoHover(project)}
-        onMouseLeave={() => project.type === "video" && onVideoHover(null)}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         {project.type === "video" ? (
           <video
@@ -82,6 +68,12 @@ function ProjectCard({ project, index, onVideoHover }) {
             loop
             playsInline
             preload="auto"
+          />
+        ) : project.type === "slideshow" ? (
+          <img
+            src={project.images[currentImageIndex]}
+            alt={project.title}
+            className="w-full h-full object-cover transition-opacity duration-500"
           />
         ) : (
           <img
@@ -99,6 +91,20 @@ function ProjectCard({ project, index, onVideoHover }) {
                 <path d="M8 5v14l11-7z" />
               </svg>
             </div>
+          </div>
+        )}
+
+        {/* Slideshow indicator for slideshow type */}
+        {project.type === "slideshow" && project.images && project.images.length > 1 && (
+          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1">
+            {project.images.map((_, idx) => (
+              <div
+                key={idx}
+                className={`w-2 h-2 rounded-full transition-all ${
+                  idx === currentImageIndex ? 'bg-[#EA9666]' : 'bg-white/50'
+                }`}
+              />
+            ))}
           </div>
         )}
 
@@ -166,19 +172,21 @@ function ProjectCard({ project, index, onVideoHover }) {
               </a>
             ) : (
               <>
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
-                           bg-white/5 border border-white/10 text-gray-300
-                           hover:text-white hover:border-[#EA9666] hover:bg-[#EA9666]/10 transition-all"
-                >
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                  </svg>
-                  Code
-                </a>
+                {project.github && (
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
+                             bg-white/5 border border-white/10 text-gray-300
+                             hover:text-white hover:border-[#EA9666] hover:bg-[#EA9666]/10 transition-all"
+                  >
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                    </svg>
+                    Code
+                  </a>
+                )}
                 <a
                   href={project.live}
                   target="_blank"
@@ -201,7 +209,158 @@ function ProjectCard({ project, index, onVideoHover }) {
   )
 }
 
-function VideoModal({ project, onClose }) {
+function SlideshowModal({ project, onClose }) {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [isHovering, setIsHovering] = useState(false)
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % project.images.length)
+  }
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + project.images.length) % project.images.length)
+  }
+
+  const handleMouseLeave = () => {
+    setIsHovering(false)
+    // Delay closing to allow moving to modal
+    setTimeout(() => {
+      if (!isHovering) {
+        onClose()
+      }
+    }, 100)
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
+
+      {/* Slideshow Container */}
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.8, opacity: 0 }}
+        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+        className="relative z-10 w-[80vw] max-w-4xl pointer-events-auto"
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
+      >
+        {/* Title */}
+        <div className="mb-4 text-center">
+          <h3 className="text-2xl font-bold text-white">{project.title}</h3>
+          <p className="text-gray-400 text-sm mt-1">{project.description}</p>
+        </div>
+
+        {/* Image Container */}
+        <div className="relative rounded-2xl overflow-hidden border border-white/20 shadow-2xl shadow-[#EA9666]/20">
+          <img
+            src={project.images[currentImageIndex]}
+            alt={`${project.title} - Image ${currentImageIndex + 1}`}
+            className="w-full aspect-video object-cover"
+          />
+
+          {/* Navigation Arrows */}
+          {project.images.length > 1 && (
+            <>
+              <button
+                onClick={prevImage}
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-[#EA9666] transition-all"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <button
+                onClick={nextImage}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-[#EA9666] transition-all"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </>
+          )}
+
+          {/* Image Counter */}
+          <div className="absolute bottom-4 right-4 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1 text-white text-sm">
+            {currentImageIndex + 1} / {project.images.length}
+          </div>
+        </div>
+
+        {/* Image Dots */}
+        {project.images.length > 1 && (
+          <div className="flex justify-center gap-2 mt-4">
+            {project.images.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentImageIndex(idx)}
+                className={`w-3 h-3 rounded-full transition-all ${
+                  idx === currentImageIndex ? 'bg-[#EA9666]' : 'bg-white/30 hover:bg-white/50'
+                }`}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Tags */}
+        <div className="flex flex-wrap gap-2 mt-4 justify-center">
+          {project.tags.map((tag) => (
+            <span
+              key={tag}
+              className="bg-[#EA9666]/10 text-[#EA9666] px-3 py-1 rounded-full text-xs font-medium
+                       border border-[#EA9666]/20"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        {/* Links */}
+        {project.showLinks && (
+          <div className="flex gap-3 justify-center mt-4">
+            {project.github && (
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
+                         bg-white/5 border border-white/10 text-gray-300
+                         hover:text-white hover:border-[#EA9666] hover:bg-[#EA9666]/10 transition-all"
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                </svg>
+                Code
+              </a>
+            )}
+            <a
+              href={project.live}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
+                       bg-[#EA9666] text-white
+                       hover:bg-[#D8A37F] hover:shadow-lg hover:shadow-[#EA9666]/30 transition-all"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+              Live Demo
+            </a>
+          </div>
+        )}
+      </motion.div>
+    </motion.div>
+  )
+}
+
+function VideoModal({ project }) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -257,6 +416,7 @@ function VideoModal({ project, onClose }) {
 
 export default function Projects() {
   const [hoveredVideo, setHoveredVideo] = useState(null)
+  const [hoveredSlideshow, setHoveredSlideshow] = useState(null)
 
   return (
     <section className="min-h-screen px-6 md:px-20 lg:px-40 pt-32 pb-20 bg-gradient-to-b from-[#0a0a0a] via-[#0f0f0f] to-[#0a0a0a]">
@@ -284,6 +444,7 @@ export default function Projects() {
               project={project}
               index={index}
               onVideoHover={setHoveredVideo}
+              onSlideshowHover={setHoveredSlideshow}
             />
           ))}
         </div>
@@ -293,6 +454,13 @@ export default function Projects() {
       <AnimatePresence>
         {hoveredVideo && (
           <VideoModal project={hoveredVideo} onClose={() => setHoveredVideo(null)} />
+        )}
+      </AnimatePresence>
+
+      {/* Slideshow Modal on Hover */}
+      <AnimatePresence>
+        {hoveredSlideshow && (
+          <SlideshowModal project={hoveredSlideshow} onClose={() => setHoveredSlideshow(null)} />
         )}
       </AnimatePresence>
     </section>

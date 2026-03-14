@@ -6,7 +6,7 @@ const services = [
   {
     icon: "design",
     title: "UI/UX Design",
-    description: "I interactive web and mobile interfaces in Figma using components, variables, styles, and Auto Layout.",
+    description: "I design interactive web and mobile interfaces in Figma using components, variables, styles, and Auto Layout.",
   },
   {
     icon: "code",
@@ -14,24 +14,24 @@ const services = [
     description: "I build responsive, high-performance web applications using React, Next.js, and modern frameworks.",
   },
   {
-    icon: "marketing",
-    title: "Digital Marketing",
-    description: "Executed a marketing campaign for a sponsor of Fast Music Club to increase brand awareness.",
+    icon: "GHL",
+    title: "Go High Level",
+    description: "I create custom code landing pages and funnels to convert most users and enhance business growth.",
   },
   {
-    icon: "socialMedia",
-    title: "Social Media Management",
-    description: "I manage social media pages, from creating engaging content to successful order conversions.",
+    icon: "SQA",
+    title: "Software Quality Assurance",
+    description: "I ensure flawless software through rigorous testing and quality assurance",
   },
   {
-    icon: "event",
-    title: "Event Management",
+    icon: "webfolios",
+    title: "Portfolio Websites",
+    description: "I create convering portfolio websites for individuals that make them stand out",
+  },
+  {
+    icon: "management",
+    title: "Event Management", 
     description: "I have worked as an Event Coordinator at Fareeda Basheer Trust, Islamabad, and as an Event Management Intern at EOTO.",
-  },
-  {
-    icon: "requirements",
-    title: "Software Requirement Elicitation",
-    description: "I have experience in gathering, analyzing, and documenting software requirements through stakeholder communication.",
   },
 ]
 
@@ -47,24 +47,24 @@ function ServiceIcon({ type }) {
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
       </svg>
     ),
-    marketing: (
+    GHL: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
       </svg>
     ),
-    socialMedia: (
+    SQA: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v6a2 2 0 002 2h2m0-8h2a2 2 0 012 2v6a2 2 0 01-2 2H9m0-8v8m0-8h6m-6 8h6" />
       </svg>
     ),
-    event: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-      </svg>
-    ),
-    requirements: (
+    webfolios: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+    ),
+    management: (
+      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
       </svg>
     ),
   }
